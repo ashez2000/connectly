@@ -8,5 +8,23 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id           String    @id @default(uuid())
+  username     String    @unique
+  displayName  String
+  bio          String?
+  avatarUrl    String?
+  email        String?   @unique
+  passwordHash String?
+  googleId     String?
+  createdAt    DateTime  @default(now())
+  session      Session[]
+}
+
+// lucia auth session model
+// ref: https://lucia-auth.com/database/prisma
+model Session {
+  id        String   @id
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  expiresAt DateTime
 }
