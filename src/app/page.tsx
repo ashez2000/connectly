@@ -1,9 +1,12 @@
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
-export default function Home() {
+export default function Page() {
   return (
-    <div className="text-green-600">
-      <Button>Hello, world!</Button>
-    </div>
+    <main>
+      <Button asChild>
+        <Link href="/signup">signup</Link>
+      </Button>
+    </main>
   )
 }
