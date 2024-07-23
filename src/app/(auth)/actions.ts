@@ -22,5 +22,5 @@ export const logout = async () => {
     sessionCookie.attributes
   )
 
-  return redirect('/login')
+  return redirect('/signin')
 }

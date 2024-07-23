@@ -10,7 +10,7 @@ export default async function Layout({ children }: Props) {
   const session = await validateRequest()
 
   if (!session.user) {
-    redirect('/login')
+    redirect('/signin')
   }
 
   return (
