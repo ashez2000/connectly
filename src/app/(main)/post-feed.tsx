@@ -1,35 +1,78 @@
 'use client'
 
-import { Post } from '@prisma/client'
-import { useQuery } from '@tanstack/react-query'
+import ky from 'ky'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
 
+import { PostsPage } from '@/lib/prisma'
 import PostCard from '@/components/post/post-card'
+import { Button } from '@/components/ui/button'
 
 export default function PostFeed() {
-  const query = useQuery<Post[]>({
-    queryKey: ['post-feed'],
-    queryFn: async () => {
-      const res = await fetch('/api/posts/feed')
-      if (!res.ok) {
-        throw new Error('Request failed')
-      }
-      return res.json()
-    },
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: ['posts', 'feed'],
+
+    queryFn: async ({ pageParam }) =>
+      ky
+        .get(
+          '/api/posts/feed',
+          pageParam ? { searchParams: { cursor: pageParam } } : {}
+        )
+        .json<PostsPage>(),
+
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   })
 
-  if (query.isPending) {
-    return <div>Loading ...</div>
+  const posts = data?.pages.flatMap((page) => page.posts) || []
+
+  if (status === 'pending') {
+    return (
+      <div>
+        <Loader2 className="mx-auto animate-spin" />
+      </div>
+    )
   }
 
-  if (query.error) {
-    return <div> Error loading post feed</div>
+  if (status === 'success' && !posts.length && !hasNextPage) {
+    return (
+      <p className="text-center text-muted-foreground">
+        No one has posted anything yet.
+      </p>
+    )
+  }
+
+  if (status === 'error') {
+    return (
+      <p className="text-center text-destructive">
+        An error occurred while loading posts.
+      </p>
+    )
   }
 
   return (
-    <div className="space-y-3">
-      {query.data.map((p) => (
-        <PostCard key={p.id} post={p} />
-      ))}
+    <div>
+      <div className="space-y-5 mb-3">
+        {isFetchingNextPage && (
+          <Loader2 className="mx-auto my-3 animate-spin" />
+        )}
+
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
+      {hasNextPage && (
+        <Button onClick={() => fetchNextPage()} disabled={isFetching}>
+          Load More
+        </Button>
+      )}
     </div>
   )
 }

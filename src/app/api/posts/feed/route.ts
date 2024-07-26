@@ -1,19 +1,34 @@
+import { NextRequest } from 'next/server'
 import { validateRequest } from '@/lib/lucia'
 import prisma, { postDisplayInclude } from '@/lib/prisma'
 
-export const GET = async () => {
+const PAGE_SIZE = 3
+
+export const GET = async (req: NextRequest) => {
   try {
     const { user } = await validateRequest()
     if (!user) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
+    const cursor = req.nextUrl.searchParams.get('cursor') || undefined
+
     const posts = await prisma.post.findMany({
       include: postDisplayInclude,
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+      take: PAGE_SIZE,
+      cursor: cursor ? { id: cursor } : undefined,
+      skip: cursor ? 1 : 0,
     })
 
-    return Response.json(posts)
+    const nextCursor = posts.at(-1)?.id
+
+    const data = {
+      posts,
+      nextCursor,
+    }
+
+    return Response.json(data)
   } catch (err) {
     console.error(err)
     return Response.json({ message: 'Internal Server Error' }, { status: 500 })

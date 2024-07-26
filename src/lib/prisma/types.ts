@@ -14,3 +14,8 @@ export const postDisplayInclude = {
 export type PostDisplay = Prisma.PostGetPayload<{
   include: typeof postDisplayInclude
 }>
+
+export type PostsPage = {
+  posts: PostDisplay[]
+  nextCursor: string | null
+}
