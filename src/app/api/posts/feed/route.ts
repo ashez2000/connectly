@@ -1,5 +1,5 @@
 import { validateRequest } from '@/lib/lucia'
-import prisma from '@/lib/prisma'
+import prisma, { postDisplayInclude } from '@/lib/prisma'
 
 export const GET = async () => {
   try {
@@ -8,7 +8,10 @@ export const GET = async () => {
       return Response.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
-    const posts = await prisma.post.findMany({})
+    const posts = await prisma.post.findMany({
+      include: postDisplayInclude,
+      orderBy: { createdAt: 'desc' },
+    })
 
     return Response.json(posts)
   } catch (err) {
