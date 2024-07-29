@@ -4,14 +4,19 @@ import { useState } from 'react'
 
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
-import { createPost } from './actions'
+import { usePostSubmitMutation } from './mutations'
 
 export default function PostForm() {
   const [content, setContent] = useState('')
+  const mutation = usePostSubmitMutation()
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
-    await createPost(content)
+    mutation.mutate(content, {
+      onSuccess: () => {
+        setContent('')
+      },
+    })
   }
 
   return (
