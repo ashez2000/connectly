@@ -19,3 +19,8 @@ export type PostsPage = {
   posts: PostDisplay[]
   nextCursor: string | null
 }
+
+export interface FollowerInfo {
+  followers: number
+  isFollowedByUser: boolean
+}
