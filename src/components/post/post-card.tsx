@@ -1,6 +1,10 @@
-import PostDeleteBtn from './post-delete-btn'
+import Link from 'next/link'
+
 import { PostDisplay } from '@/lib/prisma'
 import { toRelativeDateFormat } from '@/lib/utils'
+
+import PostDeleteBtn from './post-delete-btn'
+import { Button } from '../ui/button'
 
 type Props = {
   post: PostDisplay
@@ -15,8 +19,11 @@ export default function PostCard({ post }: Props) {
         {toRelativeDateFormat(new Date(post.createdAt))}
       </div>
       <div>{post.content}</div>
-      <div>
+      <div className="space-x-3">
         <PostDeleteBtn id={post.id} />
+        <Button variant="secondary" size="sm" asChild>
+          <Link href={`/posts/${post.id}`}>View</Link>
+        </Button>
       </div>
     </article>
   )
