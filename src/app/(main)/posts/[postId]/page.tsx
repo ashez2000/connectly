@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { validateRequest } from '@/lib/lucia'
-import prisma, { postDisplayInclude } from '@/lib/prisma'
+import prisma, { getPostDataInclude } from '@/lib/prisma'
 import PostCard from '@/components/post/post-card'
 
 type Props = {
@@ -12,7 +12,11 @@ type Props = {
 
 export default async function Page({ params: { postId } }: Props) {
   const { user } = await validateRequest()
-  const post = await fetchPost(postId)
+  if (!user) {
+    throw Error('Unauthorized')
+  }
+
+  const post = await fetchPost(postId, user.id)
 
   if (!user) {
     return (
@@ -29,12 +33,12 @@ export default async function Page({ params: { postId } }: Props) {
   )
 }
 
-const fetchPost = async (postId: string) => {
+const fetchPost = async (postId: string, curUserId: string) => {
   const post = await prisma.post.findUnique({
     where: {
       id: postId,
     },
-    include: postDisplayInclude,
+    include: getPostDataInclude(curUserId),
   })
 
   if (!post) {
