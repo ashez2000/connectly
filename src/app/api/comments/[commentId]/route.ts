@@ -8,7 +8,7 @@ type Handler = (req: Request, params: Params) => any
  * Delete comment
  * @route DELETE /api/comments/{commentId}
  */
-export const POST: Handler = async (req, { params: { commentId } }) => {
+export const DELETE: Handler = async (req, { params: { commentId } }) => {
   try {
     const { user: curUser } = await validateRequest()
     if (!curUser) {
@@ -23,7 +23,7 @@ export const POST: Handler = async (req, { params: { commentId } }) => {
       return Response.json({ message: 'Comment not found' }, { status: 404 })
     }
 
-    if (comment.id !== curUser.id) {
+    if (comment.userId !== curUser.id) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 })
     }
 

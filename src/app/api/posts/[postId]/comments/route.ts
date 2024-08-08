@@ -15,7 +15,7 @@ export const GET: Handler = async (req, { params: { postId } }) => {
       return Response.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
-    const post = await prisma.comment.findUnique({
+    const post = await prisma.post.findUnique({
       where: { id: postId },
     })
 
