@@ -1,14 +1,12 @@
-import { validateRequest } from '@/lib/lucia'
 import { redirect } from 'next/navigation'
+import { validateRequest } from '@/lib/lucia'
 
-type Props = { children: React.ReactNode }
-
-export default async function Layout({ children }: Props) {
+export default async function Layout({ children }: any) {
   const { user } = await validateRequest()
 
   if (user) {
     redirect('/')
   }
 
-  return <>{children}</>
+  return <main className="px-3 mt-36">{children}</main>
 }
