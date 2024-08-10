@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "node ./seed/main.js"
+    "seed": "node ./prisma/seed/main.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
