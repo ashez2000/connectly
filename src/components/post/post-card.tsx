@@ -3,10 +3,9 @@ import Link from 'next/link'
 import { PostDisplay } from '@/lib/prisma'
 import { toRelativeDateFormat } from '@/lib/utils'
 
-import PostDeleteBtn from './post-delete-btn'
+import { useSession } from '@/providers/session-provider'
 import { Button } from '../ui/button'
 import LikeBtn from './like-btn'
-import { useSession } from '@/providers/session-provider'
 
 type Props = {
   post: PostDisplay
@@ -16,10 +15,9 @@ export default function PostCard({ post }: Props) {
   const { user } = useSession()
 
   return (
-    <article className="space-y-3 p-3 border border-black rounded">
-      <div>
-        {post.user.displayName} @{post.user.username}
-        <br />
+    <article className="space-y-3 p-3 border border-slate-400 rounded">
+      <div className="text-sm text-slate-700">
+        {post.user.displayName} @{post.user.username} .{' '}
         {toRelativeDateFormat(new Date(post.createdAt))}
       </div>
       <div>{post.content}</div>
@@ -31,10 +29,7 @@ export default function PostCard({ post }: Props) {
             isLikedByUser: post.likes.some((like) => like.userId === user.id),
           }}
         />
-        <PostDeleteBtn id={post.id} />
-        <Button variant="secondary" size="sm" asChild>
-          <Link href={`/posts/${post.id}`}>View</Link>
-        </Button>
+        <Link href={`/posts/${post.id}`}>comments</Link>
       </div>
     </article>
   )

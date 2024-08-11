@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { validateRequest } from '@/lib/lucia'
 import prisma, { getPostDataInclude } from '@/lib/prisma'
 
-const PAGE_SIZE = 3
+const PAGE_SIZE = 8
 
 export const GET = async (req: NextRequest) => {
   try {

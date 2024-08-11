@@ -15,9 +15,11 @@ export default async function Layout({ children }: Props) {
 
   return (
     <SessionProvider value={session}>
-      <div className="max-w-7xl mx-auto p-3 space-y-3">
-        <Navbar />
-        {children}
+      <div className="max-w-5xl mx-auto mt-5 p-3 space-y-3">
+        <div className="grid grid-cols-4 gap-3">
+          <Navbar />
+          <main className="col-span-3">{children}</main>
+        </div>
       </div>
     </SessionProvider>
   )

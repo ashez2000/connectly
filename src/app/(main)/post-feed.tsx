@@ -69,9 +69,16 @@ export default function PostFeed() {
         ))}
       </div>
       {hasNextPage && (
-        <Button onClick={() => fetchNextPage()} disabled={isFetching}>
-          Load More
-        </Button>
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => fetchNextPage()}
+            disabled={isFetching}
+          >
+            Load More
+          </Button>
+        </div>
       )}
     </div>
   )

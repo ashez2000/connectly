@@ -3,23 +3,25 @@
 import Link from 'next/link'
 
 import { logout } from '@/app/(auth)/actions'
-import SearchField from '@/components/seach-field'
 import { Button } from '@/components/ui/button'
 
 export default function Navbar() {
   return (
-    <header className="border border-black rounded p-3">
-      <div className="flex items-center gap-3">
+    <header className="">
+      <div className="flex flex-col gap-3">
         <Button asChild>
-          <Link href="/">home</Link>
+          <Link href="/">Home</Link>
         </Button>
-        <SearchField />
+        <Button asChild>
+          <Link href="/posts/create">New Post</Link>
+        </Button>
         <Button
+          variant="secondary"
           onClick={() => {
             logout()
           }}
         >
-          logout
+          Logout
         </Button>
       </div>
     </header>
