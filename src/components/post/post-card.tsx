@@ -1,10 +1,10 @@
 import Link from 'next/link'
+import { MessageCircle } from 'lucide-react'
 
 import { PostDisplay } from '@/lib/prisma'
 import { toRelativeDateFormat } from '@/lib/utils'
 
 import { useSession } from '@/providers/session-provider'
-import { Button } from '../ui/button'
 import LikeBtn from './like-btn'
 
 type Props = {
@@ -29,7 +29,12 @@ export default function PostCard({ post }: Props) {
             isLikedByUser: post.likes.some((like) => like.userId === user.id),
           }}
         />
-        <Link href={`/posts/${post.id}`}>comments</Link>
+        <span className="px-1">.</span>
+        <Link href={`/posts/${post.id}`}>
+          <div className="flex items-center gap-3">
+            <MessageCircle className="size-5" /> comments
+          </div>
+        </Link>
       </div>
     </article>
   )
