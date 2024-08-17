@@ -15,6 +15,9 @@ export default function Navbar() {
         <Button asChild>
           <Link href="/posts/create">New Post</Link>
         </Button>
+        <Button asChild>
+          <Link href="/explore">Explore</Link>
+        </Button>
         <Button
           variant="secondary"
           onClick={() => {
