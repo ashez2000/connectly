@@ -17,7 +17,9 @@ export default function PostCard({ post }: Props) {
   return (
     <article className="space-y-3 p-3 border border-slate-400 rounded">
       <div className="text-sm text-slate-700">
-        {post.user.displayName} @{post.user.username} .{' '}
+        <Link href={`/users/${post.user.username}`}>
+          {post.user.displayName} @{post.user.username} .{' '}
+        </Link>
         {toRelativeDateFormat(new Date(post.createdAt))}
       </div>
       <div>{post.content}</div>

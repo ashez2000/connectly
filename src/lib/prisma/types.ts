@@ -1,5 +1,31 @@
 import { Prisma } from '@prisma/client'
 
+export function getUserProfileDataInclude(curUserId: string) {
+  return {
+    id: true,
+    username: true,
+    displayName: true,
+    avatarUrl: true,
+    bio: true,
+    createdAt: true,
+    followers: {
+      where: {
+        followerId: curUserId,
+      },
+      select: {
+        followerId: true,
+      },
+    },
+    _count: {
+      select: {
+        posts: true,
+        followers: true,
+        following: true,
+      },
+    },
+  } satisfies Prisma.UserSelect
+}
+
 /** Fields required for post display on feeds */
 export const getPostDataInclude = (curUserId: string) => {
   return {
