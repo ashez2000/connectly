@@ -1,8 +1,8 @@
 'use server'
 
-import argon from 'argon2'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import bcrypt from 'bcryptjs'
 
 import prisma from '@/lib/prisma'
 import { lucia } from '@/lib/lucia'
@@ -22,7 +22,7 @@ export const signup = async (input: SignupInput) => {
       return { error: 'Username already taken' }
     }
 
-    const passwordHash = await argon.hash(password)
+    const passwordHash = bcrypt.hashSync(password)
 
     const user = await prisma.user.create({
       data: {
@@ -36,11 +36,7 @@ export const signup = async (input: SignupInput) => {
     const session = await lucia.createSession(user.id, {})
     const sessionCookie = lucia.createSessionCookie(session.id)
 
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    )
+    cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
 
     return redirect('/')
   } catch (err) {

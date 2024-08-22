@@ -1,11 +1,21 @@
 import { PrismaClient } from '@prisma/client'
-import { users } from './users.js'
+import bcrypt from 'bcryptjs'
+import { users as _users } from './users.js'
 import { posts } from './posts.js'
 import { likes } from './likes.js'
 import { comments } from './comments.js'
 import { follow } from './follow.js'
 
 const prisma = new PrismaClient()
+
+const passwordHash = bcrypt.hashSync('123456')
+
+const users = _users.map((u) => {
+  return {
+    ...u,
+    passwordHash,
+  }
+})
 
 const clearDb = async () => {
   await prisma.like.deleteMany()

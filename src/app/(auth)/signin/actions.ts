@@ -1,8 +1,8 @@
 'use server'
 
-import argon from 'argon2'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import bcrypt from 'bcryptjs'
 
 import prisma from '@/lib/prisma'
 import { lucia } from '@/lib/lucia'
@@ -17,7 +17,7 @@ export const signin = async (input: SigninInput) => {
       return { error: 'Invalid username or password' }
     }
 
-    const isMatch = await argon.verify(user.passwordHash, password)
+    const isMatch = await bcrypt.compareSync(password, user.passwordHash)
     if (!isMatch) {
       return { error: 'Invalid username or password' }
     }
@@ -25,11 +25,7 @@ export const signin = async (input: SigninInput) => {
     const session = await lucia.createSession(user.id, {})
     const sessionCookie = lucia.createSessionCookie(session.id)
 
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    )
+    cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
 
     return redirect('/')
   } catch (err) {
