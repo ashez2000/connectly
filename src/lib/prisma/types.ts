@@ -47,6 +47,7 @@ export const getPostDataInclude = (curUserId: string) => {
     _count: {
       select: {
         likes: true,
+        comments: true,
       },
     },
   } satisfies Prisma.PostInclude

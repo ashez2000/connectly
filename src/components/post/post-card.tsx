@@ -34,7 +34,7 @@ export default function PostCard({ post }: Props) {
         <span className="px-1">.</span>
         <Link href={`/posts/${post.id}`}>
           <div className="flex items-center gap-3">
-            <MessageCircle className="size-5" /> comments
+            <MessageCircle className="size-5" /> {post._count.comments} comments
           </div>
         </Link>
       </div>

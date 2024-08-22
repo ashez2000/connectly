@@ -23,19 +23,13 @@ export default async function Page({ params: { postId } }: Props) {
   const post = await fetchPost(postId, user.id)
 
   if (!user) {
-    return (
-      <p className="text-destructive">
-        You&apos;re not authorized to view this page.
-      </p>
-    )
+    return <p className="text-destructive">You&apos;re not authorized to view this page.</p>
   }
 
   return (
-    <div>
-      <div>
-        {post.user.displayName} @{post.user.username}
-        <br />
-        {toRelativeDateFormat(new Date(post.createdAt))}
+    <div className="mt-3">
+      <div className="text-sm text-zinc-600 mb-3">
+        {post.user.displayName} @{post.user.username} . {toRelativeDateFormat(new Date(post.createdAt))}
       </div>
       <div>{post.content}</div>
       <br />
@@ -56,7 +50,7 @@ export default async function Page({ params: { postId } }: Props) {
 
       <hr className="h-[2px] my-8 bg-black mb-3" />
 
-      <h2>Comments</h2>
+      <h2 className="mb-3">Comments</h2>
 
       <CommentList postId={postId} />
     </div>
@@ -76,22 +70,4 @@ const fetchPost = async (postId: string, curUserId: string) => {
   }
 
   return post
-}
-
-const fetchComments = async (postId: string) => {
-  const comments = await prisma.comment.findMany({
-    where: {
-      postId: postId,
-    },
-    include: {
-      user: {
-        select: {
-          username: true,
-          displayName: true,
-        },
-      },
-    },
-  })
-
-  return comments
 }

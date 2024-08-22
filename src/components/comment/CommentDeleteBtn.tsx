@@ -1,5 +1,7 @@
 import ky from 'ky'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Trash2 } from 'lucide-react'
+
 import { Button } from '../ui/button'
 
 type Props = {
@@ -23,12 +25,13 @@ export default function CommentDeleteBtn({ postId, commentId }: Props) {
   })
 
   return (
-    <Button
+    <button
+      className="px-1 border border-red-500 rounded"
       onClick={() => {
         mutation.mutate()
       }}
     >
-      Delete
-    </Button>
+      <Trash2 className="w-4 text-red-500" />
+    </button>
   )
 }

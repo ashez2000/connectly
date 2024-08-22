@@ -19,13 +19,11 @@ export default function CommentCard({ comment }: Props) {
   const { user } = useSession()
 
   return (
-    <div>
+    <div className="flex justify-between items-center gap-3">
       <p>
-        @{comment.user.username}: {comment.content}
+        <span className="font-semibold">@{comment.user.username}</span> {comment.content}
       </p>
-      {comment.userId === user.id && (
-        <CommentDeleteBtn postId={comment.postId} commentId={comment.id} />
-      )}
+      {comment.userId === user.id && <CommentDeleteBtn postId={comment.postId} commentId={comment.id} />}
     </div>
   )
 }
