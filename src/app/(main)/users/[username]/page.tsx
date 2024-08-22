@@ -3,6 +3,7 @@ import { validateRequest } from '@/lib/lucia'
 import prisma, { getUserProfileDataInclude } from '@/lib/prisma'
 
 import PostFeed from './post-feed'
+import FollowBtn from '@/components/user/FollowBtn'
 
 type Props = {
   params: {
@@ -24,10 +25,15 @@ export default async function Page({ params: { username } }: Props) {
   return (
     <div className="space-y-3 max-w-md mx-auto">
       <section className="border border-slate-600 p-3 rounded-md">
-        <div className="mb-3">
-          <h3 className="text-xl font-semibold">{user.displayName}</h3>
-          <h4>@{user.username}</h4>
+        <div className="mb-3 flex justify-between items-center">
+          <div>
+            <h3 className="text-xl font-semibold">{user.displayName}</h3>
+            <h4>@{user.username}</h4>
+          </div>
+
+          <FollowBtn userId={user.id} initialState={{ followers: 0, isFollowedByUser: user.followers.length == 1 }} />
         </div>
+
         <div className="text-sm flex gap-3">
           <Stat name="posts" value={user._count.posts} />
           <Stat name="followers" value={user._count.followers} />

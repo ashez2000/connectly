@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 import { SessionProvider } from '@/providers/session-provider'
 import Navbar from './navbar'
-import CurUser from '@/components/auth/CurUser'
+import CurUser from '@/components/user/CurUser'
 
 type Props = { children: React.ReactNode }
 
