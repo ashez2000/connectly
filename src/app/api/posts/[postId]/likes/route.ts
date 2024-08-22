@@ -69,7 +69,7 @@ export const POST: Handler = async (req, { params: { postId } }) => {
       return Response.json({ message: 'Post not found' }, { status: 404 })
     }
 
-    prisma.like.upsert({
+    await prisma.like.upsert({
       where: {
         userId_postId: {
           userId: curUser.id,

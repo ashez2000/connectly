@@ -61,7 +61,7 @@ export const POST: Handler = async (req, { params: { userId } }) => {
       return Response.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
-    prisma.follow.upsert({
+    await prisma.follow.upsert({
       where: {
         followerId_followingId: {
           followerId: curUser.id,
