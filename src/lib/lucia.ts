@@ -2,6 +2,7 @@ import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { Lucia, User, Session } from 'lucia'
 import { PrismaAdapter } from '@lucia-auth/adapter-prisma'
+import { Google } from 'arctic'
 
 import prisma from './prisma'
 
@@ -41,9 +42,13 @@ interface DatabaseUserAttributes {
   googleId: string | null
 }
 
-type AuthPayload =
-  | { user: User; session: Session }
-  | { user: null; session: null }
+type AuthPayload = { user: User; session: Session } | { user: null; session: null }
+
+export const google = new Google(
+  process.env.GOOGLE_CLIENT_ID!,
+  process.env.GOOGLE_CLIENT_SECRET!,
+  process.env.APP_BASE_URL! + '/api/auth/callbacl/google'
+)
 
 export const validateRequest = cache(async (): Promise<AuthPayload> => {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null
@@ -60,20 +65,12 @@ export const validateRequest = cache(async (): Promise<AuthPayload> => {
   try {
     if (result.session && result.session.fresh) {
       const sessionCookie = lucia.createSessionCookie(result.session.id)
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      )
+      cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
     }
 
     if (!result.session) {
       const sessionCookie = lucia.createBlankSessionCookie()
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      )
+      cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
     }
   } catch {}
 
